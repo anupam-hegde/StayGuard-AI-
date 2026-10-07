@@ -2,37 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width , initial=scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static' , filename='style.css') }}">
-    <title>HOTEL RESERVATION PREDICTION ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>StayGuard AI - Hotel Reservation Cancellation Predictor</title>
 </head>
-
 
 <body>
 <div class="container">
-    <h2>Hotel Reservation Prediction</h2>
+    <h2>🏨 StayGuard AI - Cancellation Predictor</h2>
 
     <form method="POST">
         <div class="form-group">
-            <label for="lead_time">Lead Time</label>
-            <input type="number" id="lead_time" name="lead_time" required>
-        </div>
-
-
-        <div class="form-group">
-            <label for="no_of_special_request">No_of_special_request</label>
-            <input type="number" id="no_of_special_request" name="no_of_special_request" required>
+            <label for="lead_time">Lead Time (Days before arrival)</label>
+            <input type="number" id="lead_time" name="lead_time" value="30" min="0" required>
         </div>
 
         <div class="form-group">
-            <label for="avg_price_per_room">Avg_price_per_room</label>
-            <input type="number" id="avg_price_per_room" name="avg_price_per_room" required>
+            <label for="no_of_special_requests">Number of Special Requests</label>
+            <input type="number" id="no_of_special_requests" name="no_of_special_requests" value="1" min="0" required>
+        </div>
+
+        <div class="form-group">
+            <label for="avg_price_per_room">Average Price per Room ($)</label>
+            <input type="number" step="0.01" id="avg_price_per_room" name="avg_price_per_room" value="100.0" min="0" required>
         </div>
 
         <div class="form-group">
             <label for="arrival_month">Arrival Month</label>
             <select id="arrival_month" name="arrival_month" required>
-                <option value="1">Januray</option>
+                <option value="1">January</option>
                 <option value="2">February</option>
                 <option value="3">March</option>
                 <option value="4">April</option>
@@ -41,107 +39,99 @@
                 <option value="7">July</option>
                 <option value="8">August</option>
                 <option value="9">September</option>
-                <option value="10">October</option>
+                <option value="10" selected>October</option>
                 <option value="11">November</option>
                 <option value="12">December</option>
             </select>
         </div>
 
-
         <div class="form-group">
-            <label for="arrival_date">Arrival Date</label>
+            <label for="arrival_date">Arrival Day of Month</label>
             <select id="arrival_date" name="arrival_date" required>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-                <option value="15">15</option>
-                <option value="16">16</option>
-                <option value="17">17</option>
-                <option value="18">18</option>
-                <option value="19">19</option>
-                <option value="20">20</option>
-                <option value="21">21</option>
-                <option value="22">22</option>
-                <option value="23">23</option>
-                <option value="24">24</option>
-                <option value="25">25</option>
-                <option value="26">26</option>
-                <option value="27">27</option>
-                <option value="28">28</option>
-                <option value="29">29</option>
-                <option value="30">30</option>
-                <option value="31">31</option>
+                {% for d in range(1, 32) %}
+                <option value="{{ d }}" {% if d == 15 %}selected{% endif %}>{{ d }}</option>
+                {% endfor %}
             </select>
         </div>
 
         <div class="form-group">
-            <label for="market_segment_type">Market_segment_type</label>
+            <label for="market_segment_type">Market Segment Type</label>
             <select id="market_segment_type" name="market_segment_type" required>
-                <option value="0">Aviation</option>
-                <option value="1">Complimentary</option>
-                <option value="2">Corporate</option>
-                <option value="3">Offline</option>
-                <option value="4">Online</option>
+                <option value="Online" selected>Online</option>
+                <option value="Offline">Offline</option>
+                <option value="Corporate">Corporate</option>
+                <option value="Complementary">Complementary</option>
+                <option value="Aviation">Aviation</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="no_of_week_nights">No_of_week_nights</label>
-            <input type="number" id="no_of_week_nights" name="no_of_week_nights" required>
+            <label for="no_of_week_nights">Number of Week Nights</label>
+            <input type="number" id="no_of_week_nights" name="no_of_week_nights" value="2" min="0" required>
         </div>
 
         <div class="form-group">
-            <label for="no_of_weekend_nights">No_of_weekend_nights</label>
-            <input type="number" id="no_of_weekend_nights" name="no_of_weekend_nights" required>
+            <label for="no_of_weekend_nights">Number of Weekend Nights</label>
+            <input type="number" id="no_of_weekend_nights" name="no_of_weekend_nights" value="1" min="0" required>
         </div>
 
         <div class="form-group">
-            <label for="type_of_meal_plan">Type_of_meal_plan</label>
+            <label for="type_of_meal_plan">Type of Meal Plan</label>
             <select id="type_of_meal_plan" name="type_of_meal_plan" required>
-                <option value="0">Meal Plan 1</option>
-                <option value="1">Meal Plan 2</option>
-                <option value="2">Meal Plan 3</option>
-                <option value="3">Not Selected</option>
+                <option value="Meal Plan 1" selected>Meal Plan 1</option>
+                <option value="Meal Plan 2">Meal Plan 2</option>
+                <option value="Meal Plan 3">Meal Plan 3</option>
+                <option value="Not Selected">Not Selected</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="room_type_reserved">Type_of_meal_plan</label>
+            <label for="room_type_reserved">Room Type Reserved</label>
             <select id="room_type_reserved" name="room_type_reserved" required>
-                <option value="0">Room Type 1</option>
-                <option value="1">Room Type 2</option>
-                <option value="2">Room Type 3</option>
-                <option value="3">Room Type 4</option>
-                <option value="4">Room Type 5</option>
-                <option value="5">Room Type 6</option>
-                <option value="6">Room Type 7</option>
+                <option value="Room_Type 1" selected>Room Type 1</option>
+                <option value="Room_Type 2">Room Type 2</option>
+                <option value="Room_Type 3">Room Type 3</option>
+                <option value="Room_Type 4">Room Type 4</option>
+                <option value="Room_Type 5">Room Type 5</option>
+                <option value="Room_Type 6">Room Type 6</option>
+                <option value="Room_Type 7">Room Type 7</option>
             </select>
         </div>
 
-        <button type="submit">Predict</button>
+        <div class="form-group">
+            <label for="required_car_parking_space">Car Parking Space Required</label>
+            <select id="required_car_parking_space" name="required_car_parking_space" required>
+                <option value="0" selected>No</option>
+                <option value="1">Yes</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="repeated_guest">Repeated Guest</label>
+            <select id="repeated_guest" name="repeated_guest" required>
+                <option value="0" selected>No</option>
+                <option value="1">Yes</option>
+            </select>
+        </div>
+
+        <button type="submit">Predict Reservation Status</button>
     </form>
 
     {% if prediction is not none %}
-    <div class="result">
-        {% if prediction == 0 %}
-        <p>The Customer is going to cancel his reservation</p>
-        {% elif prediction == 1 %}
-        <p>The Customer is not going to cancel his reservation</p>
+    <div class="result" style="margin-top: 20px; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; background: {% if prediction == 1 %}#ffe6e6; color: #cc0000; border: 1px solid #ff9999;{% else %}#e6ffe6; color: #008800; border: 1px solid #99ff99;{% endif %}">
+        {% if prediction == 1 %}
+        <p>⚠️ High Risk: The customer is predicted to CANCEL the reservation.</p>
+        {% if probability is not none %}
+        <p style="font-size: 0.9em; font-weight: normal; margin-top: 5px;">Estimated Cancellation Probability: {{ "%.2f"|format(probability * 100) }}%</p>
+        {% endif %}
+        {% else %}
+        <p>✅ Confirmed: The customer is predicted to NOT cancel the reservation.</p>
+        {% if probability is not none %}
+        <p style="font-size: 0.9em; font-weight: normal; margin-top: 5px;">Estimated Retention Probability: {{ "%.2f"|format((1 - probability) * 100) }}%</p>
+        {% endif %}
         {% endif %}
     </div>
     {% endif %}
 </div>
-
 </body>
 </html>

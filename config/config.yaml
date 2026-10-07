@@ -4,13 +4,13 @@ data_ingestion:
   train_ratio : 0.8
 
 data_processing:
+  target_column: booking_status
   categorical_columns:
     - type_of_meal_plan
     - required_car_parking_space
     - room_type_reserved
     - market_segment_type
     - repeated_guest
-    - booking_status
   numerical_columns:
     - no_of_adults
     - no_of_children

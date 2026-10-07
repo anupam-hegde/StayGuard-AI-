@@ -1,7 +1,7 @@
 # Use a lightweight Python image
 FROM python:slim
 
-# Set environment variables to prevent Python from writing .pyc files & Ensure Python output is not buffered
+# Set environment variables to prevent Python from writing .pyc files & Ensure output is unbuffered
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
@@ -17,14 +17,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy the application code
 COPY . .
 
-# Install the package in editable mode
+# Install dependencies and local package
 RUN pip install --no-cache-dir -e .
 
-# Train the model before running the application
-RUN python pipeline/training_pipeline.py
+# Expose FastAPI serving port
+EXPOSE 8080
 
-# Expose the port that Flask will run on
-EXPOSE 5000
-
-# Command to run the app
-CMD ["python", "application.py"]
+# Launch enterprise FastAPI service via Uvicorn
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]

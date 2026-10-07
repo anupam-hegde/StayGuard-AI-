@@ -222,7 +222,7 @@ RAW_DATA_SCHEMA = DataFrameSchema(
 
 
 # ==============================================================================
-# 2. PREPROCESSED DATA CONTRACT & SCHEMA
+# 2. PROCESSED DATA CONTRACT & SCHEMA
 # ==============================================================================
 
 PROCESSED_DATA_SCHEMA = DataFrameSchema(
@@ -235,19 +235,13 @@ PROCESSED_DATA_SCHEMA = DataFrameSchema(
             nullable=False,
             required=True,
             coerce=True,
-            description="Encoded target variable: 0 or 1",
+            description="Target encoded label (0 = Not Canceled, 1 = Canceled)",
         )
     },
     checks=[
         Check(
             lambda df: not df.isnull().any().any(),
             error="Processed dataset must not contain any null values",
-        ),
-        Check(
-            lambda df: all(
-                pd.api.types.is_numeric_dtype(df[col]) for col in df.columns
-            ),
-            error="All columns in preprocessed data must be numeric dtypes",
         ),
     ],
     strict=False,

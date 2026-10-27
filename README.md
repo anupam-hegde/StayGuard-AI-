@@ -23,31 +23,79 @@
 </div>
 
 <!-- ==============================================================================
-     🎬 STAYGUARD AI: 3-ACT COMMERCIAL PITCH & TECHNICAL DEMO VIDEO
+     🖥️ STAYGUARD AI: LIVE INTERACTIVE UI DEMONSTRATION & WALKTHROUGH
      ============================================================================== -->
 <div align="center">
 
-## 🎬 Product Pitch & Live System Demonstration (24s)
+## 🖥️ Live UI Walkthrough & Interactive Demonstration
 
-*A complete 3-act overview: **Why this project** (the $14B cancellation leak), **What was built** (LightGBM + Pandera MLOps pipeline), and **Live Interactive UI Demo** (real-time risk scoring).*
+*Experience the real-time StayGuard AI Studio in action: 1-click scenario presets, dual-bound interactive sliders, dynamic radial risk gauge animations, and automated operational retention playbooks.*
 
-<video src="docs/assets/brag.mp4" controls autoplay loop muted poster="docs/assets/brag.jpg" width="100%" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6); max-width: 960px;">
-  <source src="docs/assets/brag.mp4" type="video/mp4">
-  <img src="docs/assets/brag_demo.webp" width="100%" alt="StayGuard AI Demo Video" style="border-radius: 14px;" />
+<video src="docs/assets/ui_walkthrough_demo.mp4" controls autoplay loop muted poster="docs/assets/demo_step2_high_risk.png" width="100%" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6); max-width: 960px;">
+  <source src="docs/assets/ui_walkthrough_demo.mp4" type="video/mp4">
+  <img src="docs/assets/ui_walkthrough_demo.webp" width="100%" alt="StayGuard AI Live UI Walkthrough" style="border-radius: 14px;" />
 </video>
 
 <p align="center">
-  <img src="docs/assets/brag_demo.webp" width="100%" alt="StayGuard AI Pitch & Live Demo" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.5); max-width: 960px; margin-top: 12px;" />
+  <img src="docs/assets/ui_walkthrough_demo.webp" width="100%" alt="StayGuard AI Live UI Walkthrough" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.5); max-width: 960px; margin-top: 12px;" />
 </p>
 
 <p>
-  <a href="docs/assets/brag.mp4">▶️ <b>Download / Open Full 1080p MP4 Video</b></a> &nbsp;|&nbsp; 
-  <a href="docs/system_architecture.html">🏛️ <b>Interactive Architecture Explorer</b></a> &nbsp;|&nbsp; 
-  <a href="http://localhost:8080">🌐 <b>Launch Live UI</b></a> &nbsp;|&nbsp; 
-  <a href="http://localhost:8000/docs">⚡ <b>OpenAPI Gateway</b></a>
+  <a href="docs/assets/ui_walkthrough_demo.mp4">▶️ <b>Direct Walkthrough Video (1080p MP4)</b></a> &nbsp;|&nbsp; 
+  <a href="http://localhost:8080">🌐 <b>Open Live Web Dashboard (:8080)</b></a> &nbsp;|&nbsp; 
+  <a href="http://localhost:8000/docs">⚡ <b>OpenAPI Swagger Gateway (:8000)</b></a> &nbsp;|&nbsp; 
+  <a href="docs/system_architecture.html">🏛️ <b>Architecture Explorer</b></a>
 </p>
 
 </div>
+
+---
+
+### 🕹️ How the UI Works: 3-Step Operational Workflow
+
+```
+[ Step 1: Select Preset ] ──► [ Step 2: Real-Time Scoring ] ──► [ Step 3: Actionable Playbook ]
+Corporate / High-Risk / VIP      Animated Radial Gauge (<12ms)     Auto-Deposit / Priority Check-In
+```
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/assets/demo_step1_corporate.png" alt="Corporate Low Risk Stay" />
+      <br/>
+      <b>1. Low-Risk Corporate Profile (0.0% Risk)</b><br/>
+      <i>Returning business guest with short lead time (14d). Verified as confirmed safe stay with priority express check-in readiness.</i>
+    </td>
+    <td width="50%">
+      <img src="docs/assets/demo_step2_high_risk.png" alt="High Risk Cancellation Alert" />
+      <br/>
+      <b>2. High-Risk Threat Detection (100.0% Risk)</b><br/>
+      <i>Long advance hold (280d) with past cancellations. The radial gauge turns glowing red and prescribes immediate deposit pre-authorization.</i>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <img src="docs/assets/demo_step3_custom.png" alt="Custom Booking Parameter Analysis" />
+      <br/>
+      <b>3. Interactive Parameter Studio & Real-Time Inference</b><br/>
+      <i>Dual-bound range sliders sync live with number inputs. Asynchronous AJAX calls (<code>/api/predict</code>) eliminate full-page reloads and benchmark inference latency (~11ms).</i>
+    </td>
+  </tr>
+</table>
+
+---
+
+### 🧪 Automated Website Test Suite
+
+Run the end-to-end verification script to test server connectivity, DOM components, static assets, scenario presets, and latency SLAs:
+
+```bash
+# Run comprehensive terminal test suite
+python scripts/test_website.py
+
+# Or run automated Pytest E2E suite
+pytest tests/e2e -v
+```
 
 ---
 

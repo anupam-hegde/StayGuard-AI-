@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "de300e64-55d0-443f-812b-476bc4daba7f",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\anupa\\Desktop\\ML\\Hotel-Reservation-Cancellation-Prediction\\.archify\\architecture-stayguard-mlops-20261027-175300\\candidate.json",
+  "output": "C:\\Users\\anupa\\Desktop\\ML\\Hotel-Reservation-Cancellation-Prediction\\.archify\\architecture-stayguard-mlops-20261027-175300\\stayguard-mlops.html",
+  "specification": {
+    "sha256": "d02dc16160ff9dbd39c7fb8a2562f125000274b87166bc624b7ae6c8a52522db",
+    "bytes": 8223
+  },
+  "artifact": {
+    "sha256": "8bafea37e09a0725e462f0da4f4b7cce3ed8a8e33bba202c5fff28f4b0d414d8",
+    "bytes": 838734
+  }
+}

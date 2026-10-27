@@ -1,10 +1,11 @@
-from typing import List, Literal, Optional
+from typing import List, Literal
 from pydantic import BaseModel, Field, ConfigDict
 
 
 class ReservationFeatures(BaseModel):
     """
     Input schema for hotel reservation cancellation prediction features.
+    Enforces strict typing and domain validation.
     """
     model_config = ConfigDict(
         json_schema_extra={
@@ -31,28 +32,28 @@ class ReservationFeatures(BaseModel):
     )
 
     no_of_adults: int = Field(
-        default=1,
+        ...,
         ge=0,
         le=10,
         description="Number of adults in the reservation",
         examples=[2],
     )
     no_of_children: int = Field(
-        default=0,
+        ...,
         ge=0,
         le=10,
         description="Number of children in the reservation",
         examples=[0],
     )
     no_of_weekend_nights: int = Field(
-        default=0,
+        ...,
         ge=0,
         le=20,
         description="Number of weekend nights (Saturday/Sunday) booked",
         examples=[1],
     )
     no_of_week_nights: int = Field(
-        default=1,
+        ...,
         ge=0,
         le=30,
         description="Number of weekday nights (Monday to Friday) booked",
@@ -61,12 +62,12 @@ class ReservationFeatures(BaseModel):
     type_of_meal_plan: Literal[
         "Meal Plan 1", "Meal Plan 2", "Meal Plan 3", "Not Selected"
     ] = Field(
-        default="Meal Plan 1",
+        ...,
         description="Meal plan chosen by the customer",
         examples=["Meal Plan 1"],
     )
     required_car_parking_space: Literal[0, 1] = Field(
-        default=0,
+        ...,
         description="Binary flag: 1 if parking space is requested, 0 otherwise",
         examples=[0],
     )
@@ -79,33 +80,33 @@ class ReservationFeatures(BaseModel):
         "Room_Type 6",
         "Room_Type 7",
     ] = Field(
-        default="Room_Type 1",
+        ...,
         description="Type of room reserved by the guest",
         examples=["Room_Type 1"],
     )
     lead_time: float = Field(
-        default=30.0,
+        ...,
         ge=0.0,
         le=1000.0,
         description="Number of days between booking and arrival",
         examples=[45.0],
     )
     arrival_year: int = Field(
-        default=2018,
+        ...,
         ge=2015,
         le=2035,
         description="Year of arrival",
         examples=[2018],
     )
     arrival_month: int = Field(
-        default=10,
+        ...,
         ge=1,
         le=12,
         description="Month of arrival (1-12)",
         examples=[10],
     )
     arrival_date: int = Field(
-        default=15,
+        ...,
         ge=1,
         le=31,
         description="Day of arrival month (1-31)",
@@ -114,37 +115,37 @@ class ReservationFeatures(BaseModel):
     market_segment_type: Literal[
         "Online", "Offline", "Corporate", "Complementary", "Aviation"
     ] = Field(
-        default="Online",
+        ...,
         description="Market segment designation",
         examples=["Online"],
     )
     repeated_guest: Literal[0, 1] = Field(
-        default=0,
+        ...,
         description="Binary flag: 1 if customer is a returning guest, 0 otherwise",
         examples=[0],
     )
     no_of_previous_cancellations: int = Field(
-        default=0,
+        ...,
         ge=0,
         le=100,
         description="Number of previous bookings canceled by the customer",
         examples=[0],
     )
     no_of_previous_bookings_not_canceled: int = Field(
-        default=0,
+        ...,
         ge=0,
         le=200,
         description="Number of previous bookings completed without cancellation",
         examples=[0],
     )
     avg_price_per_room: float = Field(
-        default=100.0,
+        ...,
         ge=0.0,
         description="Average daily rate / price per room in currency units",
         examples=[115.5],
     )
     no_of_special_requests: int = Field(
-        default=0,
+        ...,
         ge=0,
         le=10,
         description="Total number of special requests made by the guest",

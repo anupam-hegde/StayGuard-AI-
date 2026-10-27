@@ -1,0 +1,293 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "StayGuard AI - MLOps Architecture & Workflow",
+    "subtitle": "End-to-End Enterprise Machine Learning Pipeline, Serving Infrastructure, and CI/CD Automation",
+    "output": ".archify/architecture-stayguard-mlops-20261027-175300/stayguard-mlops.html",
+    "visual_preset": "signal-flow",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/anupam-hegde/StayGuard-AI-.git",
+      "revision": "6e24e914301e425a3505bbf20c42584a720ee149",
+      "provider": "github",
+      "link_mode": "web"
+    }
+  },
+  "components": [
+    {
+      "id": "gcp_storage",
+      "type": "cloud",
+      "label": "GCP Cloud Storage",
+      "sublabel": "gs://my_bucket19",
+      "tag": "Raw Reservoir",
+      "pos": [60, 80],
+      "size": [150, 62],
+      "sources": [
+        { "path": "config/config.yaml", "line": 1, "end_line": 5 }
+      ]
+    },
+    {
+      "id": "pandera_contracts",
+      "type": "security",
+      "label": "Pandera Schema Guard",
+      "sublabel": "Schema & Drift Check",
+      "tag": "Data Contracts",
+      "pos": [330, 80],
+      "size": [160, 62],
+      "sources": [
+        { "path": "src/schemas/data_schema.py", "line": 19, "end_line": 60 }
+      ]
+    },
+    {
+      "id": "training_engine",
+      "type": "backend",
+      "label": "ML Training Engine",
+      "sublabel": "RandomizedSearchCV CV=3",
+      "tag": "LightGBM + Pipeline",
+      "pos": [610, 80],
+      "size": [160, 62],
+      "sources": [
+        { "path": "src/model_training.py", "line": 29, "end_line": 60 }
+      ]
+    },
+    {
+      "id": "mlflow_tracking",
+      "type": "database",
+      "label": "MLflow Tracking Server",
+      "sublabel": "sqlite:///mlflow.db",
+      "tag": "Model Registry",
+      "pos": [890, 80],
+      "size": [150, 62],
+      "sources": [
+        { "path": "src/model_training.py", "line": 170, "end_line": 185 }
+      ]
+    },
+    {
+      "id": "clients",
+      "type": "external",
+      "label": "Hotel PMS / Web Clients",
+      "sublabel": "Booking Portal / REST",
+      "tag": "Client Surface",
+      "pos": [60, 260],
+      "size": [150, 62],
+      "sources": [
+        { "path": "templates/index.html", "line": 1, "end_line": 30 }
+      ]
+    },
+    {
+      "id": "fastapi_gateway",
+      "type": "backend",
+      "label": "FastAPI Gateway",
+      "sublabel": "Uvicorn ASGI :8080",
+      "tag": "Async Lifespan",
+      "pos": [330, 260],
+      "size": [160, 62],
+      "sources": [
+        { "path": "app/main.py", "line": 82, "end_line": 96 }
+      ]
+    },
+    {
+      "id": "unified_pipeline",
+      "type": "backend",
+      "label": "Unified Pipeline Artifact",
+      "sublabel": "ColumnTransformer + LGBM",
+      "tag": "Serialized Joblib",
+      "pos": [610, 260],
+      "size": [160, 62],
+      "sources": [
+        { "path": "src/data_preprocessing.py", "line": 59, "end_line": 78 }
+      ]
+    },
+    {
+      "id": "observability",
+      "type": "database",
+      "label": "Audit & Observability",
+      "sublabel": "Structured JSON Logs",
+      "tag": "Trace & Latency",
+      "pos": [890, 260],
+      "size": [150, 62],
+      "sources": [
+        { "path": "app/main.py", "line": 98, "end_line": 136 }
+      ]
+    },
+    {
+      "id": "github_repo",
+      "type": "external",
+      "label": "GitHub Repository",
+      "sublabel": "main branch trigger",
+      "tag": "Source SCM",
+      "pos": [60, 440],
+      "size": [150, 62],
+      "sources": [
+        { "path": "Jenkinsfile", "line": 13, "end_line": 24 }
+      ]
+    },
+    {
+      "id": "jenkins_cicd",
+      "type": "backend",
+      "label": "Jenkins Automation",
+      "sublabel": "Automated CI/CD",
+      "tag": "Docker In Docker",
+      "pos": [330, 440],
+      "size": [160, 62],
+      "sources": [
+        { "path": "Jenkinsfile", "line": 26, "end_line": 58 }
+      ]
+    },
+    {
+      "id": "docker_runtime",
+      "type": "cloud",
+      "label": "Docker Container",
+      "sublabel": "Python Slim + libgomp1",
+      "tag": "Production Image",
+      "pos": [610, 440],
+      "size": [160, 62],
+      "sources": [
+        { "path": "Dockerfile", "line": 1, "end_line": 27 }
+      ]
+    },
+    {
+      "id": "gcr_registry",
+      "type": "cloud",
+      "label": "Google Container Reg",
+      "sublabel": "gcr.io Artifact Hub",
+      "tag": "Container Registry",
+      "pos": [890, 440],
+      "size": [150, 62],
+      "sources": [
+        { "path": "Jenkinsfile", "line": 40, "end_line": 57 }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "MLOps Data & Training Environment",
+      "wraps": ["pandera_contracts", "training_engine", "mlflow_tracking"],
+      "pad": 16
+    },
+    {
+      "kind": "security-group",
+      "label": "FastAPI Production Serving Pod (:8080)",
+      "wraps": ["fastapi_gateway", "unified_pipeline", "observability"],
+      "pad": 16
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-raw-ingestion",
+      "from": "gcp_storage",
+      "to": "pandera_contracts",
+      "label": "Raw Ingestion",
+      "variant": "default"
+    },
+    {
+      "id": "conn-validate-schema",
+      "from": "pandera_contracts",
+      "to": "training_engine",
+      "label": "Validated Data",
+      "variant": "security"
+    },
+    {
+      "id": "conn-log-metrics",
+      "from": "training_engine",
+      "to": "mlflow_tracking",
+      "label": "Metric Logs",
+      "variant": "dashed"
+    },
+    {
+      "id": "conn-save-artifact",
+      "from": "training_engine",
+      "to": "unified_pipeline",
+      "label": "Save Artifact",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "conn-client-request",
+      "from": "clients",
+      "to": "fastapi_gateway",
+      "label": "REST JSON",
+      "variant": "emphasis"
+    },
+    {
+      "id": "conn-pipeline-infer",
+      "from": "fastapi_gateway",
+      "to": "unified_pipeline",
+      "label": "Inference Call",
+      "variant": "emphasis"
+    },
+    {
+      "id": "conn-log-audit",
+      "from": "unified_pipeline",
+      "to": "observability",
+      "label": "Audit Logs",
+      "variant": "default"
+    },
+    {
+      "id": "conn-git-webhook",
+      "from": "github_repo",
+      "to": "jenkins_cicd",
+      "label": "Git Webhook",
+      "variant": "default"
+    },
+    {
+      "id": "conn-build-image",
+      "from": "jenkins_cicd",
+      "to": "docker_runtime",
+      "label": "Build Image",
+      "variant": "default"
+    },
+    {
+      "id": "conn-push-image",
+      "from": "docker_runtime",
+      "to": "gcr_registry",
+      "label": "Push Image",
+      "variant": "emphasis"
+    },
+    {
+      "id": "conn-deploy-service",
+      "from": "jenkins_cicd",
+      "to": "fastapi_gateway",
+      "label": "Deploy Pod",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Data & Model Engineering",
+      "items": [
+        "Pandera data contracts validate raw schema constraints and statistical types",
+        "Unified Scikit-Learn pipeline combines ColumnTransformer and LightGBMClassifier",
+        "RandomizedSearchCV tunes hyperparameters across stratified cross-validation folds",
+        "MLflow tracks experiment runs, parameters, and multi-metric evaluations"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Production Serving & API Contracts",
+      "items": [
+        "FastAPI Uvicorn ASGI runtime with asynchronous lifespan model loading",
+        "Pydantic v2 schemas strictly validate incoming single and batch payloads",
+        "Microsecond latency benchmarking via X-Process-Time and UUID tracing",
+        "Actionable risk tiering: Low (<40%), Medium (40-70%), High (>=70%)"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "CI/CD & Container Orchestration",
+      "items": [
+        "Jenkins pipeline automates venv isolation, dependencies, and testing",
+        "Custom Dockerized Jenkins agent mounts docker.sock for clean container builds",
+        "Google Container Registry (GCR) stores production image artifacts",
+        "Zero-downtime serving deployment with health readiness probes"
+      ]
+    }
+  ]
+}

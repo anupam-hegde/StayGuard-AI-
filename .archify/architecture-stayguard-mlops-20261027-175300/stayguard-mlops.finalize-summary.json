@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\anupa\\Desktop\\ML\\Hotel-Reservation-Cancellation-Prediction\\.archify\\architecture-stayguard-mlops-20261027-175300\\candidate.json",
+    "sha256": "d02dc16160ff9dbd39c7fb8a2562f125000274b87166bc624b7ae6c8a52522db",
+    "bytes": 8223
+  },
+  "artifact": {
+    "path": "C:\\Users\\anupa\\Desktop\\ML\\Hotel-Reservation-Cancellation-Prediction\\.archify\\architecture-stayguard-mlops-20261027-175300\\stayguard-mlops.html",
+    "sha256": "8bafea37e09a0725e462f0da4f4b7cce3ed8a8e33bba202c5fff28f4b0d414d8",
+    "bytes": 838734
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\anupa\\Desktop\\ML\\Hotel-Reservation-Cancellation-Prediction\\.archify\\architecture-stayguard-mlops-20261027-175300\\stayguard-mlops.finalize.json",
+    "summaryReceipt": "C:\\Users\\anupa\\Desktop\\ML\\Hotel-Reservation-Cancellation-Prediction\\.archify\\architecture-stayguard-mlops-20261027-175300\\stayguard-mlops.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\anupa\\Desktop\\ML\\Hotel-Reservation-Cancellation-Prediction\\.archify\\architecture-stayguard-mlops-20261027-175300\\stayguard-mlops.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-27T12:59:42.203Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 3889,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

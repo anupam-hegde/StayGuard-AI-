@@ -22,6 +22,33 @@
 
 </div>
 
+<!-- ==============================================================================
+     🎬 STAYGUARD AI: 3-ACT COMMERCIAL PITCH & TECHNICAL DEMO VIDEO
+     ============================================================================== -->
+<div align="center">
+
+## 🎬 Product Pitch & Live System Demonstration (24s)
+
+*A complete 3-act overview: **Why this project** (the $14B cancellation leak), **What was built** (LightGBM + Pandera MLOps pipeline), and **Live Interactive UI Demo** (real-time risk scoring).*
+
+<video src="docs/assets/brag.mp4" controls autoplay loop muted poster="docs/assets/brag.jpg" width="100%" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6); max-width: 960px;">
+  <source src="docs/assets/brag.mp4" type="video/mp4">
+  <img src="docs/assets/brag_demo.webp" width="100%" alt="StayGuard AI Demo Video" style="border-radius: 14px;" />
+</video>
+
+<p align="center">
+  <img src="docs/assets/brag_demo.webp" width="100%" alt="StayGuard AI Pitch & Live Demo" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.5); max-width: 960px; margin-top: 12px;" />
+</p>
+
+<p>
+  <a href="docs/assets/brag.mp4">▶️ <b>Download / Open Full 1080p MP4 Video</b></a> &nbsp;|&nbsp; 
+  <a href="docs/system_architecture.html">🏛️ <b>Interactive Architecture Explorer</b></a> &nbsp;|&nbsp; 
+  <a href="http://localhost:8080">🌐 <b>Launch Live UI</b></a> &nbsp;|&nbsp; 
+  <a href="http://localhost:8000/docs">⚡ <b>OpenAPI Gateway</b></a>
+</p>
+
+</div>
+
 ---
 
 ## 📑 Table of Contents

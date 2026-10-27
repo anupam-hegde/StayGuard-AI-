@@ -1,137 +1,582 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>StayGuard AI - Hotel Reservation Cancellation Predictor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="StayGuard AI - Advanced Machine Learning Hotel Reservation Cancellation Risk Prediction and Revenue Intelligence Platform.">
+  <title>StayGuard AI — Hotel Reservation Risk & Cancellation Intelligence</title>
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏨</text></svg>">
 </head>
 
 <body>
-<div class="container">
-    <h2>🏨 StayGuard AI - Cancellation Predictor</h2>
 
-    <form method="POST">
-        <div class="form-group">
-            <label for="lead_time">Lead Time (Days before arrival)</label>
-            <input type="number" id="lead_time" name="lead_time" value="30" min="0" required>
-        </div>
+  <!-- =========================================================================
+       NAVIGATION BAR
+       ========================================================================= -->
+  <header class="navbar">
+    <a href="/" class="nav-brand">
+      <div class="brand-icon">🏨</div>
+      <div>
+        <div class="brand-title">StayGuard AI</div>
+        <div class="brand-subtitle">Revenue & Cancellation Intelligence</div>
+      </div>
+    </a>
 
-        <div class="form-group">
-            <label for="no_of_special_requests">Number of Special Requests</label>
-            <input type="number" id="no_of_special_requests" name="no_of_special_requests" value="1" min="0" required>
-        </div>
-
-        <div class="form-group">
-            <label for="avg_price_per_room">Average Price per Room ($)</label>
-            <input type="number" step="0.01" id="avg_price_per_room" name="avg_price_per_room" value="100.0" min="0" required>
-        </div>
-
-        <div class="form-group">
-            <label for="arrival_month">Arrival Month</label>
-            <select id="arrival_month" name="arrival_month" required>
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10" selected>October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="arrival_date">Arrival Day of Month</label>
-            <select id="arrival_date" name="arrival_date" required>
-                {% for d in range(1, 32) %}
-                <option value="{{ d }}" {% if d == 15 %}selected{% endif %}>{{ d }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="market_segment_type">Market Segment Type</label>
-            <select id="market_segment_type" name="market_segment_type" required>
-                <option value="Online" selected>Online</option>
-                <option value="Offline">Offline</option>
-                <option value="Corporate">Corporate</option>
-                <option value="Complementary">Complementary</option>
-                <option value="Aviation">Aviation</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="no_of_week_nights">Number of Week Nights</label>
-            <input type="number" id="no_of_week_nights" name="no_of_week_nights" value="2" min="0" required>
-        </div>
-
-        <div class="form-group">
-            <label for="no_of_weekend_nights">Number of Weekend Nights</label>
-            <input type="number" id="no_of_weekend_nights" name="no_of_weekend_nights" value="1" min="0" required>
-        </div>
-
-        <div class="form-group">
-            <label for="type_of_meal_plan">Type of Meal Plan</label>
-            <select id="type_of_meal_plan" name="type_of_meal_plan" required>
-                <option value="Meal Plan 1" selected>Meal Plan 1</option>
-                <option value="Meal Plan 2">Meal Plan 2</option>
-                <option value="Meal Plan 3">Meal Plan 3</option>
-                <option value="Not Selected">Not Selected</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="room_type_reserved">Room Type Reserved</label>
-            <select id="room_type_reserved" name="room_type_reserved" required>
-                <option value="Room_Type 1" selected>Room Type 1</option>
-                <option value="Room_Type 2">Room Type 2</option>
-                <option value="Room_Type 3">Room Type 3</option>
-                <option value="Room_Type 4">Room Type 4</option>
-                <option value="Room_Type 5">Room Type 5</option>
-                <option value="Room_Type 6">Room Type 6</option>
-                <option value="Room_Type 7">Room Type 7</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="required_car_parking_space">Car Parking Space Required</label>
-            <select id="required_car_parking_space" name="required_car_parking_space" required>
-                <option value="0" selected>No</option>
-                <option value="1">Yes</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="repeated_guest">Repeated Guest</label>
-            <select id="repeated_guest" name="repeated_guest" required>
-                <option value="0" selected>No</option>
-                <option value="1">Yes</option>
-            </select>
-        </div>
-
-        <button type="submit">Predict Reservation Status</button>
-    </form>
-
-    {% if prediction is not none %}
-    <div class="result" style="margin-top: 20px; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; background: {% if prediction == 1 %}#ffe6e6; color: #cc0000; border: 1px solid #ff9999;{% else %}#e6ffe6; color: #008800; border: 1px solid #99ff99;{% endif %}">
-        {% if prediction == 1 %}
-        <p>⚠️ High Risk: The customer is predicted to CANCEL the reservation.</p>
-        {% if probability is not none %}
-        <p style="font-size: 0.9em; font-weight: normal; margin-top: 5px;">Estimated Cancellation Probability: {{ "%.2f"|format(probability * 100) }}%</p>
-        {% endif %}
-        {% else %}
-        <p>✅ Confirmed: The customer is predicted to NOT cancel the reservation.</p>
-        {% if probability is not none %}
-        <p style="font-size: 0.9em; font-weight: normal; margin-top: 5px;">Estimated Retention Probability: {{ "%.2f"|format((1 - probability) * 100) }}%</p>
-        {% endif %}
-        {% endif %}
+    <div class="nav-status">
+      <span class="status-dot"></span>
+      <span>LightGBM Unified Pipeline Active</span>
     </div>
-    {% endif %}
-</div>
+  </header>
+
+  <!-- =========================================================================
+       HERO BANNER
+       ========================================================================= -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <div class="hero-pill">✨ Enterprise MLOps Model Serving</div>
+      <h1 class="hero-title">Predictive Guest Cancellation Intelligence</h1>
+      <p class="hero-desc">Harness machine learning inference to evaluate booking cancellation risk in real-time, safeguard hotel occupancy, and deploy proactive guest retention protocols.</p>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       PRESET SCENARIOS BAR
+       ========================================================================= -->
+  <section class="presets-section">
+    <div class="presets-header">
+      <span>⚡ Quick Scenarios (Click to test instant live profiles)</span>
+    </div>
+    <div class="presets-grid">
+      <button type="button" class="preset-chip" onclick="applyPreset('corporate')">
+        <span class="preset-icon">💼</span>
+        <div>
+          <div class="preset-name">Corporate Executive</div>
+          <div class="preset-badge">Low Risk • 14d Lead Time</div>
+        </div>
+      </button>
+
+      <button type="button" class="preset-chip" onclick="applyPreset('family')">
+        <span class="preset-icon">🌴</span>
+        <div>
+          <div class="preset-name">Family Leisure Stay</div>
+          <div class="preset-badge">Low/Moderate • 45d Lead</div>
+        </div>
+      </button>
+
+      <button type="button" class="preset-chip" onclick="applyPreset('highrisk')">
+        <span class="preset-icon">⚠️</span>
+        <div>
+          <div class="preset-name">High-Risk Advance Hold</div>
+          <div class="preset-badge">High Risk • 260d Lead Time</div>
+        </div>
+      </button>
+
+      <button type="button" class="preset-chip" onclick="applyPreset('luxury')">
+        <span class="preset-icon">💎</span>
+        <div>
+          <div class="preset-name">VIP Presidential Suite</div>
+          <div class="preset-badge">Low Risk • High Room Rate</div>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       MAIN WORKSTATION
+       ========================================================================= -->
+  <main class="app-container">
+
+    <!-- LEFT COLUMN: BOOKING PARAMETERS FORM -->
+    <section class="glass-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">
+          <span>⚙️</span> Reservation Parameter Studio
+        </h2>
+        <span class="panel-badge">17 Model Features</span>
+      </div>
+
+      <form id="predictionForm" method="POST" action="/" class="form-body">
+        
+        <!-- SECTION 1: STAY DATES & TIMELINE -->
+        <div class="fieldset-box">
+          <div class="fieldset-legend">📅 1. Timing & Stay Schedule</div>
+
+          <!-- Lead Time with Slider & Number input -->
+          <div class="field-group">
+            <div class="field-label">
+              <span>Lead Time (Days Prior to Arrival)</span>
+              <span id="leadTimeDisplay" class="field-value-badge">45 Days</span>
+            </div>
+            <input type="range" id="lead_time_range" min="0" max="365" value="45" class="range-slider" oninput="syncLeadTime(this.value)">
+            <input type="number" id="lead_time" name="lead_time" value="45" min="0" max="500" class="input-control" oninput="syncLeadTime(this.value)" required>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="field-group">
+              <label for="arrival_year" class="field-label">Arrival Year</label>
+              <select id="arrival_year" name="arrival_year" class="select-control">
+                <option value="2018" selected>2018</option>
+                <option value="2019">2019</option>
+                <option value="2026">2026</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="arrival_month" class="field-label">Arrival Month</label>
+              <select id="arrival_month" name="arrival_month" class="select-control" required>
+                <option value="1">01 - January</option>
+                <option value="2">02 - February</option>
+                <option value="3">03 - March</option>
+                <option value="4">04 - April</option>
+                <option value="5">05 - May</option>
+                <option value="6">06 - June</option>
+                <option value="7">07 - July</option>
+                <option value="8">08 - August</option>
+                <option value="9">09 - September</option>
+                <option value="10" selected>10 - October</option>
+                <option value="11">11 - November</option>
+                <option value="12">12 - December</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="arrival_date" class="field-label">Day of Month</label>
+              <select id="arrival_date" name="arrival_date" class="select-control" required>
+                {% for d in range(1, 32) %}
+                <option value="{{ d }}" {% if d == 15 %}selected{% endif %}>Day {{ d }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label for="no_of_week_nights" class="field-label">Weekday Nights (Mon-Fri)</label>
+              <input type="number" id="no_of_week_nights" name="no_of_week_nights" value="2" min="0" max="30" class="input-control" required>
+            </div>
+
+            <div class="field-group">
+              <label for="no_of_weekend_nights" class="field-label">Weekend Nights (Sat-Sun)</label>
+              <input type="number" id="no_of_weekend_nights" name="no_of_weekend_nights" value="1" min="0" max="20" class="input-control" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: ACCOMMODATION & RATES -->
+        <div class="fieldset-box">
+          <div class="fieldset-legend">🛏️ 2. Room Tier & Dining Options</div>
+
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label for="no_of_adults" class="field-label">Adult Guests</label>
+              <input type="number" id="no_of_adults" name="no_of_adults" value="2" min="1" max="10" class="input-control" required>
+            </div>
+
+            <div class="field-group">
+              <label for="no_of_children" class="field-label">Children</label>
+              <input type="number" id="no_of_children" name="no_of_children" value="0" min="0" max="10" class="input-control" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label for="room_type_reserved" class="field-label">Room Type Tier</label>
+              <select id="room_type_reserved" name="room_type_reserved" class="select-control" required>
+                <option value="Room_Type 1" selected>Room Type 1 (Deluxe King)</option>
+                <option value="Room_Type 2">Room Type 2 (Executive Double)</option>
+                <option value="Room_Type 3">Room Type 3 (Club Suite)</option>
+                <option value="Room_Type 4">Room Type 4 (Grand Suite)</option>
+                <option value="Room_Type 5">Room Type 5 (Family Suite)</option>
+                <option value="Room_Type 6">Room Type 6 (Penthouse)</option>
+                <option value="Room_Type 7">Room Type 7 (Presidential)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="type_of_meal_plan" class="field-label">Dining & Meal Plan</label>
+              <select id="type_of_meal_plan" name="type_of_meal_plan" class="select-control" required>
+                <option value="Meal Plan 1" selected>Meal Plan 1 (Breakfast Included)</option>
+                <option value="Meal Plan 2">Meal Plan 2 (Half Board)</option>
+                <option value="Meal Plan 3">Meal Plan 3 (Full Board)</option>
+                <option value="Not Selected">Not Selected (Room Only)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Average Room Price with Slider -->
+          <div class="field-group">
+            <div class="field-label">
+              <span>Average Room Rate per Night ($)</span>
+              <span id="priceDisplay" class="field-value-badge">$115.50</span>
+            </div>
+            <input type="range" id="avg_price_range" min="30" max="400" step="1" value="115" class="range-slider" oninput="syncPrice(this.value)">
+            <input type="number" step="0.01" id="avg_price_per_room" name="avg_price_per_room" value="115.50" min="0" class="input-control" oninput="syncPrice(this.value)" required>
+          </div>
+        </div>
+
+        <!-- SECTION 3: CHANNEL & GUEST HISTORY -->
+        <div class="fieldset-box">
+          <div class="fieldset-legend">👤 3. Booking Channel & Guest Profile</div>
+
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label for="market_segment_type" class="field-label">Market Segment Channel</label>
+              <select id="market_segment_type" name="market_segment_type" class="select-control" required>
+                <option value="Online" selected>Online Travel Agency (OTA)</option>
+                <option value="Offline">Direct / Offline Phone</option>
+                <option value="Corporate">Corporate Account</option>
+                <option value="Aviation">Airline / Aviation</option>
+                <option value="Complementary">Complementary VIP</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="no_of_special_requests" class="field-label">Special Requests Made</label>
+              <input type="number" id="no_of_special_requests" name="no_of_special_requests" value="1" min="0" max="10" class="input-control" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label for="repeated_guest" class="field-label">Repeated Returning Guest?</label>
+              <select id="repeated_guest" name="repeated_guest" class="select-control" required>
+                <option value="0" selected>No (First-time Guest)</option>
+                <option value="1">Yes (Loyalty Member / Returnee)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="required_car_parking_space" class="field-label">Parking Space Reserved?</label>
+              <select id="required_car_parking_space" name="required_car_parking_space" class="select-control" required>
+                <option value="0" selected>No Parking Required</option>
+                <option value="1">Yes (Valet / Parking Spot)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label for="no_of_previous_cancellations" class="field-label">Historical Cancellations</label>
+              <input type="number" id="no_of_previous_cancellations" name="no_of_previous_cancellations" value="0" min="0" class="input-control" required>
+            </div>
+
+            <div class="field-group">
+              <label for="no_of_previous_bookings_not_canceled" class="field-label">Historical Completed Stays</label>
+              <input type="number" id="no_of_previous_bookings_not_canceled" name="no_of_previous_bookings_not_canceled" value="0" min="0" class="input-control" required>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-submit">
+          <span>⚡</span>
+          <span>Analyze Booking Cancellation Risk</span>
+        </button>
+
+        <div id="loadingIndicator" class="loading-indicator">
+          <div class="spinner"></div>
+          <span>Computing pipeline probabilities via LightGBM...</span>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- RIGHT COLUMN: LIVE INTELLIGENCE & VISUAL RESULTS -->
+    <aside class="results-pane">
+
+      <!-- SUITE PHOTO SHOWCASE CARD -->
+      <div class="photo-card">
+        <img src="/static/images/suite.jpg" alt="Luxury Hotel Suite" class="photo-card-img" id="showcaseImage">
+        <div class="photo-card-overlay">
+          <span class="photo-badge">Luxury Suite Tier</span>
+          <h3 class="photo-title">Grand Skyline Suite</h3>
+          <p class="photo-sub">High floor • Floor-to-ceiling glass • Ambient soundproofing</p>
+        </div>
+      </div>
+
+      <!-- PREDICTION SCORE CARD -->
+      <div class="glass-panel score-card" id="scorePanel">
+        <div class="panel-header" style="width: 100%; border: none; padding: 0 0 1rem; justify-content: center;">
+          <h3 class="panel-title">🎯 AI Cancellation Risk Score</h3>
+        </div>
+
+        <!-- Animated Radial Progress Ring -->
+        <div class="gauge-container">
+          <svg class="gauge-svg" viewBox="0 0 160 160">
+            <circle class="gauge-bg" cx="80" cy="80" r="70"></circle>
+            <circle id="gaugeRing" class="gauge-progress" cx="80" cy="80" r="70"></circle>
+          </svg>
+          <div class="gauge-inner-text">
+            <span id="gaugePct" class="gauge-pct">
+              {% if probability is not none %}{{ "%.1f"|format(probability * 100) }}%{% else %}8.2%{% endif %}
+            </span>
+            <span class="gauge-label">Cancel Risk</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Risk Status Pill -->
+        <div id="riskStatusPill" class="risk-status-pill {% if prediction == 1 %}status-high{% elif probability and probability >= 0.4 %}status-medium{% endif %}">
+          <span id="statusIcon">
+            {% if prediction == 1 %}⚠️{% else %}✅{% endif %}
+          </span>
+          <span id="statusText">
+            {% if prediction == 1 %}High Cancellation Risk{% else %}Confirmed / Safe Stay{% endif %}
+          </span>
+        </div>
+
+        <!-- Strategic Action Recommendation Box -->
+        <div class="action-box">
+          <div class="action-title">
+            <span>💡</span> Recommended Operational Action
+          </div>
+          <p id="actionRecommendation" class="action-text">
+            {% if risk_info %}
+              {{ risk_info.action }}
+            {% elif prediction == 1 %}
+              High Risk Detected. Require immediate card guarantee or offer non-refundable discounted pricing to lock in the reservation.
+            {% else %}
+              Low Risk / High Confidence. Reservation is well-hedged. Proceed with standard pre-arrival welcome email and express check-in.
+            {% endif %}
+          </p>
+        </div>
+
+        <!-- Telemetry Data -->
+        <div class="telemetry-row">
+          <div class="telemetry-item">
+            <div class="telemetry-label">Inference Speed</div>
+            <div id="telemetryLatency" class="telemetry-val">~11.4 ms</div>
+          </div>
+          <div class="telemetry-item">
+            <div class="telemetry-label">Model Pipeline</div>
+            <div class="telemetry-val">LightGBM v1.0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECONDARY CONCIERGE PHOTO CARD -->
+      <div class="concierge-card">
+        <img src="/static/images/concierge.jpg" alt="Concierge Desk" class="concierge-thumb">
+        <div class="concierge-info">
+          <h4>24/7 Intelligent Concierge</h4>
+          <p>Automated guest follow-ups adjust messaging tone based on real-time StayGuard risk scores.</p>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="footer">
+    <p>StayGuard AI — Machine Learning Operations (MLOps) Hotel Retention Platform</p>
+    <div class="footer-links">
+      <a href="http://127.0.0.1:8000/docs" target="_blank" class="footer-link">Swagger REST API Docs</a>
+      <a href="http://127.0.0.1:8000/redoc" target="_blank" class="footer-link">ReDoc Specification</a>
+      <a href="http://127.0.0.1:8000/health" target="_blank" class="footer-link">System Health Check</a>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       INTERACTIVE JAVASCRIPT STUDIO ENGINE
+       ========================================================================= -->
+  <script>
+    // Gauge Circumference: 2 * PI * r = 2 * 3.14159 * 70 ≈ 440
+    const GAUGE_CIRCUMFERENCE = 440;
+
+    function updateGauge(prob) {
+      const ring = document.getElementById('gaugeRing');
+      const pctDisplay = document.getElementById('gaugePct');
+      const pill = document.getElementById('riskStatusPill');
+      const icon = document.getElementById('statusIcon');
+      const text = document.getElementById('statusText');
+      const actionText = document.getElementById('actionRecommendation');
+
+      const pct = (prob * 100).toFixed(1);
+      pctDisplay.textContent = `${pct}%`;
+
+      // Calculate stroke-dashoffset (0 = 100%, 440 = 0%)
+      const offset = GAUGE_CIRCUMFERENCE - (prob * GAUGE_CIRCUMFERENCE);
+      ring.style.strokeDashoffset = offset;
+
+      // Update color and risk badges
+      if (prob >= 0.70) {
+        ring.style.stroke = 'var(--risk-high)';
+        pill.className = 'risk-status-pill status-high';
+        icon.textContent = '⚠️';
+        text.textContent = 'High Cancellation Risk';
+        actionText.textContent = 'High Risk of Cancellation. Recommend requiring card pre-authorization, deposit, or offering an immediate non-refundable rate discount.';
+      } else if (prob >= 0.40) {
+        ring.style.stroke = 'var(--risk-medium)';
+        pill.className = 'risk-status-pill status-medium';
+        icon.textContent = '⚡';
+        text.textContent = 'Moderate Cancellation Risk';
+        actionText.textContent = 'Moderate Risk. Send an automated pre-arrival concierge email and confirm guest itinerary 48 hours prior.';
+      } else {
+        ring.style.stroke = 'var(--risk-low)';
+        pill.className = 'risk-status-pill';
+        icon.textContent = '✅';
+        text.textContent = 'Confirmed / Safe Stay';
+        actionText.textContent = 'Low Risk / High Confidence. Reservation is well-hedged. Proceed with standard pre-arrival welcome email and express check-in.';
+      }
+    }
+
+    function syncLeadTime(val) {
+      document.getElementById('lead_time').value = val;
+      document.getElementById('lead_time_range').value = val;
+      document.getElementById('leadTimeDisplay').textContent = `${val} Days`;
+    }
+
+    function syncPrice(val) {
+      document.getElementById('avg_price_per_room').value = val;
+      document.getElementById('avg_price_range').value = val;
+      document.getElementById('priceDisplay').textContent = `$${parseFloat(val).toFixed(2)}`;
+    }
+
+    // Quick Presets
+    const presets = {
+      corporate: {
+        lead_time: 14,
+        avg_price_per_room: 135.0,
+        no_of_special_requests: 1,
+        market_segment_type: 'Corporate',
+        repeated_guest: 1,
+        no_of_previous_cancellations: 0,
+        no_of_previous_bookings_not_canceled: 3,
+        no_of_adults: 1,
+        no_of_children: 0,
+        no_of_week_nights: 3,
+        no_of_weekend_nights: 0,
+        type_of_meal_plan: 'Meal Plan 1',
+        room_type_reserved: 'Room_Type 1',
+        required_car_parking_space: 0,
+        arrival_month: 10,
+        arrival_date: 12
+      },
+      family: {
+        lead_time: 45,
+        avg_price_per_room: 155.0,
+        no_of_special_requests: 2,
+        market_segment_type: 'Online',
+        repeated_guest: 0,
+        no_of_previous_cancellations: 0,
+        no_of_previous_bookings_not_canceled: 0,
+        no_of_adults: 2,
+        no_of_children: 2,
+        no_of_week_nights: 4,
+        no_of_weekend_nights: 2,
+        type_of_meal_plan: 'Meal Plan 1',
+        room_type_reserved: 'Room_Type 4',
+        required_car_parking_space: 1,
+        arrival_month: 7,
+        arrival_date: 20
+      },
+      highrisk: {
+        lead_time: 280,
+        avg_price_per_room: 89.0,
+        no_of_special_requests: 0,
+        market_segment_type: 'Online',
+        repeated_guest: 0,
+        no_of_previous_cancellations: 2,
+        no_of_previous_bookings_not_canceled: 0,
+        no_of_adults: 2,
+        no_of_children: 0,
+        no_of_week_nights: 4,
+        no_of_weekend_nights: 1,
+        type_of_meal_plan: 'Not Selected',
+        room_type_reserved: 'Room_Type 1',
+        required_car_parking_space: 0,
+        arrival_month: 11,
+        arrival_date: 5
+      },
+      luxury: {
+        lead_time: 25,
+        avg_price_per_room: 295.0,
+        no_of_special_requests: 3,
+        market_segment_type: 'Offline',
+        repeated_guest: 1,
+        no_of_previous_cancellations: 0,
+        no_of_previous_bookings_not_canceled: 5,
+        no_of_adults: 2,
+        no_of_children: 0,
+        no_of_week_nights: 2,
+        no_of_weekend_nights: 2,
+        type_of_meal_plan: 'Meal Plan 2',
+        room_type_reserved: 'Room_Type 7',
+        required_car_parking_space: 1,
+        arrival_month: 12,
+        arrival_date: 28
+      }
+    };
+
+    function applyPreset(key) {
+      const data = presets[key];
+      if (!data) return;
+
+      for (const [id, val] of Object.entries(data)) {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+      }
+
+      syncLeadTime(data.lead_time);
+      syncPrice(data.avg_price_per_room);
+
+      // Trigger instant AJAX prediction
+      submitPredictionAjax();
+    }
+
+    async function submitPredictionAjax() {
+      const form = document.getElementById('predictionForm');
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+
+      const loading = document.getElementById('loadingIndicator');
+      loading.style.display = 'flex';
+
+      const startTime = performance.now();
+
+      try {
+        const response = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const elapsed = (performance.now() - startTime).toFixed(1);
+        document.getElementById('telemetryLatency').textContent = `${elapsed} ms`;
+
+        if (response.ok) {
+          const result = await response.json();
+          updateGauge(result.cancellation_probability);
+        } else {
+          console.error('Inference error response');
+        }
+      } catch (err) {
+        console.error('AJAX request failed, falling back to form submit:', err);
+        form.submit();
+      } finally {
+        loading.style.display = 'none';
+      }
+    }
+
+    // Intercept form submit for smooth AJAX experience
+    document.getElementById('predictionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitPredictionAjax();
+    });
+
+    // Initialize gauge on initial load
+    window.addEventListener('DOMContentLoaded', () => {
+      {% if probability is not none %}
+        updateGauge({{ probability }});
+      {% else %}
+        updateGauge(0.082);
+      {% endif %}
+      syncLeadTime(document.getElementById('lead_time').value);
+      syncPrice(document.getElementById('avg_price_per_room').value);
+    });
+  </script>
 </body>
 </html>

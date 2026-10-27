@@ -91,3 +91,8 @@ Thumbs.db
 *.swo
 .cursorignore
 .cursorindexingignore
+
+# ==========================================
+# Brag Temporary Work Files & Frame Dumps
+# ==========================================
+brag-output/work/

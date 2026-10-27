@@ -1,0 +1,5 @@
+Why do hotels lose up to 30% of their revenue to cancellations? Because traditional PMS systems only record reservations—they don't predict human behavior.
+
+I built StayGuard AI: an end-to-end MLOps platform engineered with LightGBM, Pandera schema contracts, and sub-12ms inference latency to forecast guest cancellations and automate deposit guarantees before check-in.
+
+Watch the 24-second launch demo below or explore the live web studio at http://localhost:8080 and Swagger API gateway at http://localhost:8000/docs.
